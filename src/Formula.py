@@ -9,6 +9,15 @@ def F(m_1, m_2, r) -> float:
     """
     return G * ((m_1 * m_2)/r**2)
 
+def angle_of_vectors(force_components) -> tuple:
+    """
+    Calculates distance and angle between two component_forces.
+    Returns tuple 'angle'.
+    !!! Angles are not completely distinguishable from each other. -45 degress stands for -1/1 and 1/-1 !!!
+    """
+    return math.atan(force_components[1] # y
+                     / force_components[0]) # x
+
 def pythagoras(*args) -> float:
     temp = 0
     for i in args:

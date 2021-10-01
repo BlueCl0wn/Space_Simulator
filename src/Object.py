@@ -1,5 +1,6 @@
 # libraries
 import math
+import numpy as np
 
 # methods
 import Formula
@@ -8,9 +9,10 @@ class Object:
     def __init__(self, id,  mass, position) -> None:
         self.id = id
 
+        self.stats = []
+
         self.forces = []
         self.force = None
-        self.total_force = None
         self.a = None
         self.v = None
 
@@ -19,6 +21,20 @@ class Object:
         # self.position = position
         self.x = position[0]
         self.y = position[1]
+
+
+
+    def save_stats(self) -> None:
+        """
+        Saves all important informations in the list 'self.stats' for later usage.
+        """
+        forces = np.array(self.forces)
+        acceleration = self.a
+        speed = self.v
+        pos = (self.x, self.y)
+
+        arr = np.array([forces, acceleration, speed, pos])
+        self.stats.append(arr)
 
     def get_relation(self, object) -> tuple:
         """
@@ -32,7 +48,7 @@ class Object:
 
         return (Formula.pythagoras(x, y), a)
 
-    def get_force(self, object) -> None:
+    def calc_force(self, object) -> None:
         """
         Calculates Force and splits it up in its x and y components.
         Returns tuple ('dis_x', 'dis_y').
@@ -45,29 +61,49 @@ class Object:
         F_x = math.cos(a) * F
         F_y = math.sin(a) * F
 
-        self.forces.append((F_x, F_y))
+        self.forces.append((F, a, (F_x, F_y)))
 
-    def calc_force(self) -> None:
+    def calc_sum_force(self) -> None:
+        """
+        Creates a tuple with all current information about self.
+        Returns '(magnitude, angle, (F_x, F_y))'.
+        """
         temp_x = 0
         temp_y = 0
         for i in self.forces:
             temp_x += i[0]
             temp_y += i[1]
         self.force = (temp_x, temp_y)
-        self.calc_total_force()
+        force_components = (temp_x, temp_y)
+        sum_force = Formula.pythagoras(self.force[0], self.force[1])
+        angle = F.angle_of_vectors(force_components)
+        self.force = (sum_force, angle, force_components)
 
+    def calc_acceleration(self) -> None:
+        """
+        Calculates the acceleration on self.
+        """
+        a = Formula.a(self.total_force, self.mass)
+        a_x = Formula.a(self.force[0], self.mass)
+        a_y = Formula.a(self.force[1], self.mass)
+        self.a = (a, (a_x, a_y))
 
-    def calc_total_force(self) -> None:
-        self.total_force = Formula.pythagoras(self.force[0], self.force[1])
+    def calc_velocity(self) -> None:
+        v = Formula.v(self.a, t)
+        v_x = Formula.v(self.a_x, t)
+        v_y = Formula.v(self.a_y , t)
+        self.v = (v, (v_x, v_y))
 
-    def new_pos(self, t) -> None:
-        self.a = Formula.a(self.total_force, self.mass)
-        self.v = Formula.v(self.a, t)
+    # def calc_total_force(self) -> None:
+    #     self.total_force = Formula.pythagoras(self.force[0], self.force[1])
 
-        self.a_x = Formula.a(self.force[0], self.mass)
-        self.a_y = Formula.a(self.force[1], self.mass)
-        self.v_x = Formula.v(self.a_x, t)
-        self.v_y = Formula.v(self.a_y , t)
-
+    def calc_new_pos(self, t) -> None:
         self.x = Formula.d(t, self.a_x, self.v_x, self.x)
         self.y = Formula.d(t, self.a_y, self.v_y, self.x)
+
+    def all_calcs(self, t) -> None:
+        calc_sum_force()
+        calc_acceleration()
+        calc_velocity()
+        calc_new_pos(t)
+        save_stats()

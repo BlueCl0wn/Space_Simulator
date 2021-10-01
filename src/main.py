@@ -8,20 +8,21 @@ t = 1
 objects = []
 objects.append(Object(1, 1000000, (-2, 0)))
 objects.append(Object(2, 2000000, (2, 0)))
-# objects.append(Object(3, 3000000, (2, 4)))
+objects.append(Object(3, 3000000, (2, 4)))
 # objects.append(Object(4, 4000000, (3, 2)))
 # objects.append(Object(5, 5000000, (4, 5)))
 
 
-def calc_all_forces(objects) -> None:
+def calc_all_forces(objects, t) -> None:
     for i in range(len(objects)-1):
         for j in range(i+1, len(objects)):
-            objects[i].get_force(objects[j])
-            objects[j].get_force(objects[i])
+            objects[i].calc_force(objects[j])
+            objects[j].calc_force(objects[i])
     for i in objects:
-        i.calc_force()
+        i.calc_sum_force()
         # i.calc_total_force()
-        i.new_pos(t)
+        i.all_calcs(t)
+
 
 
 
