@@ -27,7 +27,7 @@ def calc_all_forces(objects, t) -> None:
 
 
 
-calc_all_forces(objects)
+calc_all_forces(objects, t)
 
 for i in objects:
     print("id = %s" % i.id)

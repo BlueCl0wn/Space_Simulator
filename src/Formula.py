@@ -15,8 +15,11 @@ def angle_of_vectors(force_components) -> tuple:
     Returns tuple 'angle'.
     !!! Angles are not completely distinguishable from each other. -45 degress stands for -1/1 and 1/-1 !!!
     """
-    return math.atan(force_components[1] # y
-                     / force_components[0]) # x
+    if force_components[0] == 0:
+        return math.pi/2
+    else:
+        return math.atan(force_components[1] # y
+                        / force_components[0]) # x
 
 def pythagoras(*args) -> float:
     temp = 0
@@ -29,7 +32,7 @@ def a(F, m) -> float:
     return F / m
 
 def v(a, t, v_0=0) -> float:
-    return (a * t) + v_0
+    return a * t + v_0
 
 def d(t, a=0, v_0=0, x_0=0) -> float:
     return x_0 + v_0*t + 0.5*a*t**2
