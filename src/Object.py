@@ -33,7 +33,17 @@ class Object:
         speed = self.v
         pos = (self.x, self.y)
 
-        arr = np.array([forces, acceleration, speed, pos],dtype=object)
+        # print("\tforces = %s")
+        # print(forces)
+        # print("\tacceleration = ")
+        # print(acceleration)
+        # print("\tspeed = ")
+        # print(speed)
+        # print("\tpos = ")
+        # print(pos)
+
+        # arr = np.array([forces, acceleration, speed, pos],dtype=object)
+        arr = [forces, acceleration, speed, pos]
         self.stats.append(arr)
 
     def get_relation(self, object) -> tuple:
@@ -57,8 +67,10 @@ class Object:
         Returns tuple ('dis_x', 'dis_y').
         """
         relation = self.get_relation(object)
-        print(relation)
+        # print(relation)
 
+        print("distance: ")
+        print(relation[0])
         F = Formula.F(self.mass, object.mass, relation[0])
         a = relation[1]
 
