@@ -1,6 +1,7 @@
 # libraries
 from Object import Object
 import math
+import matplotlib.pyplot as plt
 
 
 
@@ -17,10 +18,10 @@ Kraftkomponente in y-Richtung, obwohl nur versetzt in x-Ebene
 
 
 # t in s per iteration
-t = 100
+t = 2
 objects = []
-objects.append(Object(1, 100000, (-1, 0)))
-objects.append(Object(2, 100000, (1, 0)))
+objects.append(Object(1, 100000000, (-1, -0)))
+objects.append(Object(2, 100000000, (1, 0)))
 # objects.append(Object(3, 300000, (2, 4)))
 # objects.append(Object(4, 4000000, (3, 2)))
 # objects.append(Object(5, 5000000, (4, 5)))
@@ -37,23 +38,57 @@ def calc_all_forces(objects, t) -> None:
         i.all_calcs(t)
 
 
+r = 400
 
+for i in range(r):
+    # print("x[0] = {0} m".format(objects[0].x))
+    # print("x[1] = {0} m".format(objects[1].x))
 
-for i in range(100):
     calc_all_forces(objects, t)
-    print("F[0] = {0} N".format(objects[0].force))
-    print("F[1] = {0} N".format(objects[1].force))
 
-    print("x[0] = {0} m".format(objects[0].x))
-    print("x[1] = {0} m".format(objects[1].x))
+    # print("F[0] = {0} N".format(objects[0].force))
+    # print("F[1] = {0} N".format(objects[1].force))
 
-    print("y[0] = {0} m".format(objects[0].y))
-    print("y[1] = {0} m".format(objects[1].y))
+    # print("x[0] = {0} m".format(objects[0].x))
+    # print("x[1] = {0} m".format(objects[1].x))
 
-    print("a = {0} m/s^2".format(objects[0].a))
-    print("v = {0} m/s".format(objects[0].v))
-    print("----------------")
+    # print("y[0] = {0} m".format(objects[0].y))
+    # print("y[1] = {0} m".format(objects[1].y))
 
+    # print("a = {0} m/s^2".format(objects[0].a))
+    # print("v = {0} m/s".format(objects[0].v))
+    # print("----------------")
+
+print(objects[0].stats[0])
+print(objects[0].stats[0][0])
+print(objects[0].stats[0][0][0])
+print(objects[0].stats[0][0][0][0])
+
+position = [pos[3][0] for pos in objects[0].stats]
+position2 = [pos[3][0] for pos in objects[1].stats]
+print("pos: {}".format(position))
+velocity = [pos[2][0] for pos in objects[0].stats]
+acceleration = [pos[1][0] for pos in objects[0].stats]
+force = [pos[0][0][0] for pos in objects[0].stats]
+print("force")
+print(force)
+time = [i for i in range(r)]
+
+fig, ax = plt.subplots()
+ax.plot(time, position, color='blue') # position
+ax.plot(time, position2, color='magenta') # position
+ax.plot(time, velocity, color='red') # velocity
+ax.plot(time, acceleration, color='black') # acceleration
+# ax.plot(time, force, color='orange') # force
+ax.set_xlim(30, 70)
+ax.grid()
+plt.show()
+
+# for i in objects[0].stats:
+#     print(i[2][0])
+#     print(i[2][1][0])
+#     # print("i: {}".format(i))
+#     print("-----------")
 
 #
 # for i in objects:

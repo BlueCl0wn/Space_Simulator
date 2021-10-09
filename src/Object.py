@@ -12,7 +12,7 @@ class Object:
         self.stats = []
 
         self.forces = []
-        self.force = None # (F, a, (F_x, F_y))
+        self.force = None # (F, alpha, (F_x, F_y))
         self.a = None
         self.v = None
 
@@ -28,7 +28,8 @@ class Object:
         """
         Saves all important informations in the list 'self.stats' for later usage.
         """
-        forces = np.array(self.forces, dtype=object)
+        # forces = np.array(self.forces, dtype=object)
+        F = (self.force, self.forces)
         acceleration = self.a
         speed = self.v
         pos = (self.x, self.y)
@@ -43,7 +44,7 @@ class Object:
         # print(pos)
 
         # arr = np.array([forces, acceleration, speed, pos],dtype=object)
-        arr = [forces, acceleration, speed, pos]
+        arr = [F, acceleration, speed, pos]
         self.stats.append(arr)
 
     def get_relation(self, object) -> tuple:
@@ -54,12 +55,22 @@ class Object:
         x = object.x - self.x
         y = object.y - self.y
 
-        if x == 0:
-            return (Formula.pythagoras(x, y), math.pi/2)
-        else:
-            a = math.atan(y/x)
+        # Debug stuff
+        # print("object.y: {}".format(object.y))
+        # print("self.y: {}".format(self.y))
+        # print("x: {}".format(x))
+        # print("y: {}".format(y))
 
-        return (Formula.pythagoras(x, y), a)
+        # if x == 0:
+        #     angle = math.pi/2
+        # elif x < 0:
+        #     angle = 2*math.pi - math.atan(y/x)
+        # else:
+        #     angle = math.atan(y/x)
+
+        angle = Formula.angle_of_vectors(x, y)
+
+        return (Formula.pythagoras(x, y), angle)
 
     def calc_force(self, object) -> None:
         """
@@ -67,17 +78,20 @@ class Object:
         Returns tuple ('dis_x', 'dis_y').
         """
         relation = self.get_relation(object)
+        angle = relation[1]
         # print(relation)
 
-        print("distance: ")
-        print(relation[0])
+        # print("distance: ")
+        # print(relation[0])
+        # print("angle: ")
+        # print(relation[1])
+
         F = Formula.F(self.mass, object.mass, relation[0])
-        a = relation[1]
 
-        F_x = math.cos(a) * F
-        F_y = math.sin(a) * F
+        F_x = math.cos(angle) * F
+        F_y = math.sin(angle) * F
 
-        self.forces.append((F, a, (F_x, F_y)))
+        self.forces.append((F, angle, (F_x, F_y)))
 
     def calc_sum_force(self) -> None:
         """
@@ -87,13 +101,17 @@ class Object:
         temp_x = 0
         temp_y = 0
         for i in self.forces:
-            temp_x += i[0]
-            temp_y += i[1]
+            temp_x += i[2][0]
+            temp_y += i[2][1]
         self.force = (temp_x, temp_y)
-        force_components = (temp_x, temp_y)
+        # print(self.forces)
+        self.forces = []
+
         sum_force = Formula.pythagoras(self.force[0], self.force[1])
-        angle = Formula.angle_of_vectors(force_components)
-        self.force = (sum_force, angle, force_components)
+        angle = Formula.angle_of_vectors(self.force[0], self.force[1])
+        self.force = (sum_force, angle, self.force)
+
+        # print("F[{}] = {} N".format(self.id, self.force))
 
     def calc_acceleration(self) -> None:
         """
@@ -104,21 +122,25 @@ class Object:
         a_y = Formula.a(self.force[2][1], self.mass)
         self.a = (a, (a_x, a_y))
 
+        # print("a[{}]: {}".format(self.id, self.a))
+
     def calc_velocity(self, t) -> None:
         v = Formula.v(self.a[0], t)
         v_x = Formula.v(self.a[1][0], t)
         v_y = Formula.v(self.a[1][1] , t)
         self.v = (v, (v_x, v_y))
 
+        # print("v[{}] = {} N".format(self.id, self.v))
+
     # def calc_total_force(self) -> None:
     #     self.total_force = Formula.pythagoras(self.force[0], self.force[1])
 
     def calc_new_pos(self, t) -> None:
         self.x = Formula.d(t, self.a[1][0], self.v[1][0], self.x)
-        self.y = Formula.d(t, self.a[1][1], self.v[1][1], self.x)
+        self.y = Formula.d(t, self.a[1][1], self.v[1][1], self.y)
 
     def all_calcs(self, t) -> None:
-        self.calc_sum_force()
+        # self.calc_sum_force()
         self.calc_acceleration()
         self.calc_velocity(t)
         self.calc_new_pos(t)
