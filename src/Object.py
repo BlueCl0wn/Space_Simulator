@@ -48,6 +48,9 @@ class Object:
         arr = [F, acceleration, speed, pos]
         self.stats.append(arr)
 
+    def get_distance(self, object) -> float:
+        return Formula.pythagoras(object.x - self.x, object.y - self.y)
+
     def get_relation(self, object) -> tuple:
         """
         Calculates distance and angle of self and given object.
@@ -79,7 +82,7 @@ class Object:
         Returns tuple ('dis_x', 'dis_y').
         """
         relation = self.get_relation(object)
-        angle = relation[1]
+        angle = Formula.angle_of_vectors(object.x - self.x, object.y - self.y)
         # print(relation)
 
         # print("distance: ")
@@ -87,7 +90,7 @@ class Object:
         # print("angle: ")
         # print(relation[1])
 
-        F = Formula.F(self.mass, object.mass, relation[0])
+        F = Formula.F(self.mass, object.mass, get_distance(self, object))
 
         F_x = round(math.cos(angle) * F, 9)
         F_y = round(math.sin(angle) * F, 9)

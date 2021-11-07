@@ -34,7 +34,10 @@ def angle_of_vectors(x, y) -> float:
     else: # Q1 (+x|+y)
         return math.atan(y/x)
 
-# angle_of_vectors(-1, 0)
+
+
+def are_touching(*args) -> boolean:
+    pass
 
 def pythagoras(*args) -> float:
     temp = 0
