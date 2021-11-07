@@ -7,7 +7,8 @@ def F(m_1, m_2, r) -> float:
     """
     Calculates the Force between two massive objects.
     """
-    return G * ((m_1 * m_2)/r**2)
+    temp =G * m_1 * m_2
+    return temp/r**2
 
 # def split_F_components(F, angle) -> tuple:
 #     """
@@ -15,24 +16,25 @@ def F(m_1, m_2, r) -> float:
 #     """
 #     f_x = math.cos(angle) * F
 
-def angle_of_vectors(x, y) -> tuple:
+def angle_of_vectors(x, y) -> float:
     """
     Calculates distance and angle between two component_forces.
-    Returns tuple 'angle'.
-    !!! Angles are not completely distinguishable from each other. -45 degress stands for -1/1 and 1/-1 !!!
+    Returns float 'angle'.
+    Angles are now completely distinguishable from each other. Resulting angels can range from 0 to 360 degrees.
     """
     # if force_components[0] == 0:
     #     return math.pi/2
     # else:
     #     return math.atan(force_components[1] # y
     #                     / force_components[0]) # x
-
-    if x == 0:
-        return math.pi/2
-    elif x < 0:
-        return math.pi - math.atan(y/x)
-    else:
+    if y < 0 and x > 0: # Q2 (+x|-y)
+        return 2 + math.pi * math.atan(y/x)
+    elif x < 0: # Q3 & Q4 (-x|-+y)
+        return math.pi + math.atan(y/x)
+    else: # Q1 (+x|+y)
         return math.atan(y/x)
+
+# angle_of_vectors(-1, 0)
 
 def pythagoras(*args) -> float:
     temp = 0

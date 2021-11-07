@@ -6,17 +6,18 @@ import numpy as np
 import Formula
 
 class Object:
-    def __init__(self, id,  mass, position) -> None:
+    def __init__(self, id, mass, position, radius, v) -> None:
         self.id = id
 
         self.stats = []
 
-        self.forces = []
+        self.current_forces = []
         self.force = None # (F, alpha, (F_x, F_y))
         self.a = None
         self.v = None
 
         self.mass = mass
+        self.r = radius
 
         # self.position = position
         self.x = position[0]
@@ -29,7 +30,7 @@ class Object:
         Saves all important informations in the list 'self.stats' for later usage.
         """
         # forces = np.array(self.forces, dtype=object)
-        F = (self.force, self.forces)
+        F = (self.force, self.current_forces)
         acceleration = self.a
         speed = self.v
         pos = (self.x, self.y)
@@ -88,10 +89,15 @@ class Object:
 
         F = Formula.F(self.mass, object.mass, relation[0])
 
-        F_x = math.cos(angle) * F
-        F_y = math.sin(angle) * F
+        F_x = round(math.cos(angle) * F, 9)
+        F_y = round(math.sin(angle) * F, 9)
 
-        self.forces.append((F, angle, (F_x, F_y)))
+        # print("-----------")
+        # print(angle)
+        # print("pi = {}".format(math.pi))
+        #
+        # print(F_x)
+        self.current_forces.append((F, angle, (F_x, F_y)))
 
     def calc_sum_force(self) -> None:
         """
@@ -100,16 +106,19 @@ class Object:
         """
         temp_x = 0
         temp_y = 0
-        for i in self.forces:
+        print()
+        print(self.current_forces)
+        for i in self.current_forces:
             temp_x += i[2][0]
             temp_y += i[2][1]
-        self.force = (temp_x, temp_y)
-        # print(self.forces)
-        self.forces = []
 
-        sum_force = Formula.pythagoras(self.force[0], self.force[1])
-        angle = Formula.angle_of_vectors(self.force[0], self.force[1])
-        self.force = (sum_force, angle, self.force)
+        temp_force = (temp_x, temp_y)
+
+        self.current_forces = []
+
+        sum_force = Formula.pythagoras(temp_force[0], temp_force[1])
+        angle = Formula.angle_of_vectors(temp_force[0], temp_force[1])
+        self.force = (sum_force, angle, temp_force)
 
         # print("F[{}] = {} N".format(self.id, self.force))
 
