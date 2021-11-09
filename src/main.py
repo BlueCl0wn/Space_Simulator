@@ -1,42 +1,43 @@
 # libraries
 from Object import Object
 import math
-import matplotlib.pyplot as plt
-
-
-
-"""
-
-!!! Fehler !!!:
-Bei Berechnung der Kraft. Die Richtung der Kraft auf zwei Körper ist die gleiche. Müsste aber aufeinander zeigen (+ und -).
-Kraftkomponente in y-Richtung, obwohl nur versetzt in x-Ebene
-
-
-
-"""
+#import matplotlib.pyplot as plt
 
 
 
 # t in s per iteration
-t = 0.01
+t = 1
 objects = []
-objects.append(Object(1, 100000000, (1, 0), 5, v=(0,100)))
-objects.append(Object(2, 100000000, (0, 0), 5, v=(0,-100)))
+objects.append(Object(1, "Mars", 100000000, (1, 0), 5, v=(0,100)))
+objects.append(Object(2, "Sonne", 100000000, (0, 0), 5, v=(0,-100)))
 # objects.append(Object(3, 300000, (2, 4)))
 # objects.append(Object(4, 4000000, (3, 2)))
 # objects.append(Object(5, 5000000, (4, 5)))
 
 
-def calc_all_forces(objects, t) -> None:
+def calc_various_forces(objects) -> None:
+    """
+    Calculates the forces between all Objects in list 'objects'.
+    """
     for i in range(len(objects)-1):
         for j in range(i+1, len(objects)):
             objects[i].calc_force(objects[j])
             objects[j].calc_force(objects[i])
+
+def do_movements(objects) -> None:
     for i in objects:
         i.calc_sum_force()
         # i.calc_total_force()
-        i.all_calcs(t)
+        i.do_movement(t)
 
+
+
+def calc_all_forces(objects, t) -> None:
+    calc_various_forces(objects)
+    for i in objects:
+        i.calc_sum_force()
+        # i.calc_total_force()
+        i.do_movement(t)
 
 r = 100
 
@@ -47,8 +48,7 @@ for i in range(r):
 
     objects[0].calc_force(objects[1])
     objects[0].calc_sum_force()
-    objects[0].all_calcs(t)
-
+    objects[0].do_movement(t)
 
 
 

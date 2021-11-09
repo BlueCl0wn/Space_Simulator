@@ -6,8 +6,9 @@ import numpy as np
 import Formula
 
 class Object:
-    def __init__(self, id, mass, position, radius, v) -> None:
+    def __init__(self, id, name, mass, position, radius, v) -> None:
         self.id = id
+        self.name = name
 
         self.stats = []
 
@@ -48,8 +49,8 @@ class Object:
         arr = [F, acceleration, speed, pos]
         self.stats.append(arr)
 
-    def get_distance(self, object) -> float:
-        return Formula.pythagoras(object.x - self.x, object.y - self.y)
+#    def get_distance(self, object) -> float:
+#        return Formula.pythagoras(object.x - self.x, object.y - self.y)
 
     def get_relation(self, object) -> tuple:
         """
@@ -90,7 +91,7 @@ class Object:
         # print("angle: ")
         # print(relation[1])
 
-        F = Formula.F(self.mass, object.mass, get_distance(self, object))
+        F = Formula.F(self.mass, object.mass, Formula.get_distance(self, object))
 
         F_x = round(math.cos(angle) * F, 9)
         F_y = round(math.sin(angle) * F, 9)
@@ -151,9 +152,13 @@ class Object:
         self.x = Formula.d(t, self.a[1][0], self.v[1][0], self.x)
         self.y = Formula.d(t, self.a[1][1], self.v[1][1], self.y)
 
-    def all_calcs(self, t) -> None:
+    def do_movement(self, t) -> None:
         # self.calc_sum_force()
         self.calc_acceleration()
         self.calc_velocity(t)
         self.calc_new_pos(t)
+
         self.save_stats()
+
+    def did_collide(self, object) -> None:
+        print("I ({}) collided with {}".format(self.name, object.name))

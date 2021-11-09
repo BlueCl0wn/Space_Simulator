@@ -34,11 +34,6 @@ def angle_of_vectors(x, y) -> float:
     else: # Q1 (+x|+y)
         return math.atan(y/x)
 
-
-
-def are_touching(*args) -> boolean:
-    pass
-
 def pythagoras(*args) -> float:
     temp = 0
     for i in args:
@@ -54,3 +49,11 @@ def v(a, t, v_0=0) -> float:
 
 def d(t, a=0, v_0=0, x_0=0) -> float:
     return x_0 + v_0*t + 0.5*a*t**2
+
+def get_distance(object1, object2) -> float:
+    x = object2.x - object1.x
+    y = object2.y - object1.y
+    pythagoras(x, y)
+
+def check_for_collision(object1, object2) -> bool:
+    return True if (object1.r + object2.r) >= get_distance(object1, object2) else False
