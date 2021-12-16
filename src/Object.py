@@ -24,7 +24,6 @@ class Object:
         self.y = position[1]
 
 
-
     def save_stats(self) -> None:
         """
         Saves all important informations in the list 'self.stats' for later usage.
@@ -35,21 +34,14 @@ class Object:
         speed = self.v
         pos = (self.x, self.y)
 
-        # print("\tforces = %s")
-        # print(forces)
-        # print("\tacceleration = ")
-        # print(acceleration)
-        # print("\tspeed = ")
-        # print(speed)
-        # print("\tpos = ")
-        # print(pos)
-
         # arr = np.array([forces, acceleration, speed, pos],dtype=object)
         arr = [F, acceleration, speed, pos]
         self.stats.append(arr)
 
+
     def get_distance(self, object) -> float:
         return Formula.pythagoras(object.x - self.x, object.y - self.y)
+
 
     def get_relation(self, object) -> tuple:
         """
@@ -59,22 +51,11 @@ class Object:
         x = object.x - self.x
         y = object.y - self.y
 
-        # Debug stuff
-        # print("object.y: {}".format(object.y))
-        # print("self.y: {}".format(self.y))
-        # print("x: {}".format(x))
-        # print("y: {}".format(y))
-
-        # if x == 0:
-        #     angle = math.pi/2
-        # elif x < 0:
-        #     angle = 2*math.pi - math.atan(y/x)
-        # else:
-        #     angle = math.atan(y/x)
-
         angle = Formula.angle_of_vectors(x, y)
+        distance = Formula.pythagoras(x, y)
 
-        return (Formula.pythagoras(x, y), angle)
+        return (distance, angle)
+
 
     def calc_force(self, object) -> None:
         """
@@ -83,24 +64,14 @@ class Object:
         """
         relation = self.get_relation(object)
         angle = Formula.angle_of_vectors(object.x - self.x, object.y - self.y)
-        # print(relation)
 
-        # print("distance: ")
-        # print(relation[0])
-        # print("angle: ")
-        # print(relation[1])
-
-        F = Formula.F(self.mass, object.mass, get_distance(self, object))
+        F = Formula.F(self.mass, object.mass, relation[0])
 
         F_x = round(math.cos(angle) * F, 9)
         F_y = round(math.sin(angle) * F, 9)
 
-        # print("-----------")
-        # print(angle)
-        # print("pi = {}".format(math.pi))
-        #
-        # print(F_x)
         self.current_forces.append((F, angle, (F_x, F_y)))
+
 
     def calc_sum_force(self) -> None:
         """
@@ -123,7 +94,6 @@ class Object:
         angle = Formula.angle_of_vectors(temp_force[0], temp_force[1])
         self.force = (sum_force, angle, temp_force)
 
-        # print("F[{}] = {} N".format(self.id, self.force))
 
     def calc_acceleration(self) -> None:
         """
@@ -134,7 +104,6 @@ class Object:
         a_y = Formula.a(self.force[2][1], self.mass)
         self.a = (a, (a_x, a_y))
 
-        # print("a[{}]: {}".format(self.id, self.a))
 
     def calc_velocity(self, t) -> None:
         v = Formula.v(self.a[0], t)
@@ -142,17 +111,14 @@ class Object:
         v_y = Formula.v(self.a[1][1] , t)
         self.v = (v, (v_x, v_y))
 
-        # print("v[{}] = {} N".format(self.id, self.v))
-
-    # def calc_total_force(self) -> None:
-    #     self.total_force = Formula.pythagoras(self.force[0], self.force[1])
 
     def calc_new_pos(self, t) -> None:
         self.x = Formula.d(t, self.a[1][0], self.v[1][0], self.x)
         self.y = Formula.d(t, self.a[1][1], self.v[1][1], self.y)
 
-    def all_calcs(self, t) -> None:
-        # self.calc_sum_force()
+
+    def do_calculations(self, t) -> None:
+        self.calc_sum_force()
         self.calc_acceleration()
         self.calc_velocity(t)
         self.calc_new_pos(t)

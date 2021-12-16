@@ -36,7 +36,7 @@ def angle_of_vectors(x, y) -> float:
 
 
 
-def are_touching(*args) -> boolean:
+def are_touching(*args) -> bool:
     pass
 
 def pythagoras(*args) -> float:

@@ -33,9 +33,9 @@ def calc_all_forces(objects, t) -> None:
             objects[i].calc_force(objects[j])
             objects[j].calc_force(objects[i])
     for i in objects:
-        i.calc_sum_force()
+        #i.calc_sum_force()
         # i.calc_total_force()
-        i.all_calcs(t)
+        i.do_calculations(t)
 
 
 r = 100
@@ -46,8 +46,8 @@ for i in range(r):
 
 
     objects[0].calc_force(objects[1])
-    objects[0].calc_sum_force()
-    objects[0].all_calcs(t)
+    #objects[0].calc_sum_force()
+    objects[0].do_calculations(t)
 
 
 
