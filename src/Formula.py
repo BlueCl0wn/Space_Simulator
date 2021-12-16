@@ -18,19 +18,16 @@ def F(m_1, m_2, r) -> float:
 
 def angle_of_vectors(x, y) -> float:
     """
-    Calculates distance and angle between two component_forces.
+    Calculates angle between two component_forces.
     Returns float 'angle'.
     Angles are now completely distinguishable from each other. Resulting angels can range from 0 to 360 degrees.
     """
-    # if force_components[0] == 0:
-    #     return math.pi/2
-    # else:
-    #     return math.atan(force_components[1] # y
-    #                     / force_components[0]) # x
     if y < 0 and x > 0: # Q2 (+x|-y)
         return 2 + math.pi * math.atan(y/x)
     elif x < 0: # Q3 & Q4 (-x|-+y)
         return math.pi + math.atan(y/x)
+    elif x == 0:
+        print("x == 0")
     else: # Q1 (+x|+y)
         return math.atan(y/x)
 

@@ -28,12 +28,8 @@ def do_movements(objects) -> None:
     for i in objects:
         #i.calc_sum_force()
         # i.calc_total_force()
-<<<<<<< HEAD
-        i.do_calculations(t)
-=======
         i.do_movement(t)
 
->>>>>>> 027249ce0495607d8c6be04f7d85b8654bb04dbc
 
 
 def calc_all_forces(objects, t) -> None:
@@ -51,14 +47,14 @@ for i in range(r):
 
 
     objects[0].calc_force(objects[1])
-<<<<<<< HEAD
+
     #objects[0].calc_sum_force()
     objects[0].do_calculations(t)
 
-=======
+
     objects[0].calc_sum_force()
     objects[0].do_movement(t)
->>>>>>> 027249ce0495607d8c6be04f7d85b8654bb04dbc
+
 
 
 

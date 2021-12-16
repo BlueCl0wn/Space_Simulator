@@ -116,14 +116,14 @@ class Object:
         self.x = Formula.d(t, self.a[1][0], self.v[1][0], self.x)
         self.y = Formula.d(t, self.a[1][1], self.v[1][1], self.y)
 
-<<<<<<< HEAD
 
     def do_calculations(self, t) -> None:
         self.calc_sum_force()
-=======
+
+
     def do_movement(self, t) -> None:
         # self.calc_sum_force()
->>>>>>> 027249ce0495607d8c6be04f7d85b8654bb04dbc
+
         self.calc_acceleration()
         self.calc_velocity(t)
         self.calc_new_pos(t)
