@@ -48,12 +48,7 @@ for i in range(r):
 
     objects[0].calc_force(objects[1])
 
-    #objects[0].calc_sum_force()
     objects[0].do_calculations(t)
-
-
-    objects[0].calc_sum_force()
-    objects[0].do_movement(t)
 
 
 

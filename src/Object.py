@@ -63,12 +63,13 @@ class Object:
         Returns tuple ('dis_x', 'dis_y').
         """
         relation = self.get_relation(object)
-        angle = Formula.angle_of_vectors(object.x - self.x, object.y - self.y)
+        angle = relation[1]
+        #Formula.angle_of_vectors(object.x - self.x, object.y - self.y)
 
         F = Formula.F(self.mass, object.mass, relation[0])
 
-        F_x = round(math.cos(angle) * F, 9)
-        F_y = round(math.sin(angle) * F, 9)
+        F_x = round(math.cos(angle) * F, 8)
+        F_y = round(math.sin(angle) * F, 8)
 
         self.current_forces.append((F, angle, (F_x, F_y)))
 
@@ -120,15 +121,12 @@ class Object:
     def do_calculations(self, t) -> None:
         self.calc_sum_force()
 
-
-    def do_movement(self, t) -> None:
-        # self.calc_sum_force()
-
         self.calc_acceleration()
         self.calc_velocity(t)
         self.calc_new_pos(t)
 
         self.save_stats()
+
 
     def did_collide(self, object) -> None:
         print("I ({}) collided with {}".format(self.name, object.name))

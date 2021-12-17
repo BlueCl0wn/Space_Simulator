@@ -22,12 +22,14 @@ def angle_of_vectors(x, y) -> float:
     Returns float 'angle'.
     Angles are now completely distinguishable from each other. Resulting angels can range from 0 to 360 degrees.
     """
+    print(x)
+    print(y)
     if y < 0 and x > 0: # Q2 (+x|-y)
-        return 2 + math.pi * math.atan(y/x)
+        return 2 + math.pi + math.atan(y/x)
     elif x < 0: # Q3 & Q4 (-x|-+y)
         return math.pi + math.atan(y/x)
-    elif x == 0:
-        print("x == 0")
+    #elif x == 0:
+    #    print("x == 0")
     else: # Q1 (+x|+y)
         return math.atan(y/x)
 
