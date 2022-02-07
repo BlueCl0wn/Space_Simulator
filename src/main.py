@@ -25,8 +25,6 @@ celestials = [Object(2000000000000000000, (500, 500), 30, id=0, name="sun", v=0,
               Object(1000000000000000000, (1000, 500), 20, id=1, name="mars", v=0, image_path="resources/mars.png")
               ]
 
-help(Object)
-
 run = True
 while run:
 
