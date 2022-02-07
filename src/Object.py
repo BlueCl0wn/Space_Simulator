@@ -1,19 +1,29 @@
 # libraries
 import math
-import numpy as np
+import pygame
+# import numpy as np
 
 # methods
 import Formula
 
-class Object:
-    def __init__(self, id, name, mass, position, radius, v) -> None:
+
+class Object(pygame.sprite.Sprite):
+    def __init__(self, mass: int, position: tuple, radius: int, ID: int = 0,
+                 name: str = "no name", v: int = 0.0):
+        pygame.sprite.Sprite.__init__(self)
+
+        # Necessary for super class Sprite
+        self.image = pygame.Surface([20, 20])
+        self.image.fill((255, 0, 0))
+        self.rect = self.image.get_rect()
+
         self.id = id
         self.name = name
 
         self.stats = []
 
         self.current_forces = []
-        self.force = None # (F, alpha, (F_x, F_y))
+        self.force = None  # (F, alpha, (F_x, F_y))
         self.a = None
         self.v = None
 
@@ -24,10 +34,12 @@ class Object:
         self.x = position[0]
         self.y = position[1]
 
+    def get_pos(self) -> tuple:
+        return self.x, self.y
 
     def save_stats(self) -> None:
         """
-        Saves all important informations in the list 'self.stats' for later usage.
+        Saves all important information in the list 'self.stats' for later usage.
         """
         # forces = np.array(self.forces, dtype=object)
         F = (self.force, self.current_forces)
@@ -39,9 +51,8 @@ class Object:
         arr = [F, acceleration, speed, pos]
         self.stats.append(arr)
 
-#    def get_distance(self, object) -> float:
-#        return Formula.pythagoras(object.x - self.x, object.y - self.y)
-
+    #    def get_distance(self, object) -> float:
+    #        return Formula.pythagoras(object.x - self.x, object.y - self.y)
 
     def get_relation(self, object) -> tuple:
         """
@@ -54,8 +65,7 @@ class Object:
         angle = Formula.angle_of_vectors(x, y)
         distance = Formula.pythagoras(x, y)
 
-        return (distance, angle)
-
+        return distance, angle
 
     def calc_force(self, object) -> None:
         """
@@ -64,7 +74,7 @@ class Object:
         """
         relation = self.get_relation(object)
         angle = relation[1]
-        #Formula.angle_of_vectors(object.x - self.x, object.y - self.y)
+        # Formula.angle_of_vectors(object.x - self.x, object.y - self.y)
 
         F = Formula.F(self.mass, object.mass, relation[0])
 
@@ -72,7 +82,6 @@ class Object:
         F_y = round(math.sin(angle) * F, 8)
 
         self.current_forces.append((F, angle, (F_x, F_y)))
-
 
     def calc_sum_force(self) -> None:
         """
@@ -95,7 +104,6 @@ class Object:
         angle = Formula.angle_of_vectors(temp_force[0], temp_force[1])
         self.force = (sum_force, angle, temp_force)
 
-
     def calc_acceleration(self) -> None:
         """
         Calculates the acceleration on self.
@@ -105,18 +113,15 @@ class Object:
         a_y = Formula.a(self.force[2][1], self.mass)
         self.a = (a, (a_x, a_y))
 
-
     def calc_velocity(self, t) -> None:
         v = Formula.v(self.a[0], t)
         v_x = Formula.v(self.a[1][0], t)
-        v_y = Formula.v(self.a[1][1] , t)
+        v_y = Formula.v(self.a[1][1], t)
         self.v = (v, (v_x, v_y))
-
 
     def calc_new_pos(self, t) -> None:
         self.x = Formula.d(t, self.a[1][0], self.v[1][0], self.x)
         self.y = Formula.d(t, self.a[1][1], self.v[1][1], self.y)
-
 
     def do_calculations(self, t) -> None:
         self.calc_sum_force()
@@ -126,7 +131,6 @@ class Object:
         self.calc_new_pos(t)
 
         self.save_stats()
-
 
     def did_collide(self, object) -> None:
         print("I ({}) collided with {}".format(self.name, object.name))
