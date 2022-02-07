@@ -10,20 +10,15 @@ clock = pygame.time.Clock()
 
 screen.fill((255, 255, 255))
 
-
 mars = Object(2000, (200, 400), 20)
-
 
 run = True
 while run:
 
     for event in pygame.event.get():
-        if event.type==QUIT:
+        if event.type == QUIT:
             pygame.quit()
 
     screen.blit(mars.image, mars.get_pos())
     pygame.display.update()
     clock.tick(30)
-
-
-
