@@ -8,6 +8,8 @@ def F(m_1, m_2, r) -> float:
     """
     Calculates the Force between two massive objects.
     """
+    if r == 0:
+        return 0
     temp = G * m_1 * m_2
     return temp / r ** 2
 
@@ -24,8 +26,10 @@ def angle_of_vectors(x, y) -> float:
     Returns float 'angle'.
     Angles are now completely distinguishable from each other. Resulting angels can range from 0 to 360 degrees.
     """
-    print(x)
-    print(y)
+
+    # print(x)
+    # print(y)
+
     if y < 0 and x > 0:  # Q2 (+x|-y)
         return 2 + math.pi + math.atan(y / x)
     elif x < 0:  # Q3 & Q4 (-x|-+y)

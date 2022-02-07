@@ -8,13 +8,52 @@ import Formula
 
 
 class Object(pygame.sprite.Sprite):
-    def __init__(self, mass: int, position: tuple, radius: int, ID: int = 0,
-                 name: str = "no name", v: int = 0.0):
+    """
+    A class representing celestial bodies.
+
+    ...
+
+    Attributes:
+
+    mass : int
+    position : tuple
+    radius : int
+    id : int
+    name : str
+    v : int
+    image_path : str
+
+    ---------------
+
+    Methods:
+
+    get_pos():
+    save_stats()
+    get_relation( object)
+    calc_force(object)
+    calc_sum_force()
+    calc_velocity()
+    calc_new_pos(t)
+    do_calculations(t)
+    did_collide(object)
+
+    -------------------
+    """
+
+    def __init__(self, mass: int, position: tuple, radius: int, id: int = 0,
+                 name: str = "no name", v: int = 0.0, image_path="None.png"):
+        """
+        Constructs all the necessary attributes for the person object.
+
+        Parameters:
+
+        None
+        """
+
         pygame.sprite.Sprite.__init__(self)
 
         # Necessary for super class Sprite
-        self.image = pygame.Surface([20, 20])
-        self.image.fill((255, 0, 0))
+        self.image = pygame.image.load(image_path).convert_alpha()
         self.rect = self.image.get_rect()
 
         self.id = id
@@ -50,9 +89,6 @@ class Object(pygame.sprite.Sprite):
         # arr = np.array([forces, acceleration, speed, pos],dtype=object)
         arr = [F, acceleration, speed, pos]
         self.stats.append(arr)
-
-    #    def get_distance(self, object) -> float:
-    #        return Formula.pythagoras(object.x - self.x, object.y - self.y)
 
     def get_relation(self, object) -> tuple:
         """
@@ -90,8 +126,7 @@ class Object(pygame.sprite.Sprite):
         """
         temp_x = 0
         temp_y = 0
-        print()
-        print(self.current_forces)
+
         for i in self.current_forces:
             temp_x += i[2][0]
             temp_y += i[2][1]
